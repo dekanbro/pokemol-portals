@@ -46,6 +46,30 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "member",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "i",
+        type: "uint256",
+      },
+    ],
+    name: "getMemberProposalVote",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "proposalId",
         type: "uint256",
@@ -150,6 +174,19 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "proposalCount",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -237,6 +274,19 @@ const _abi = [
         internalType: "bool",
         name: "",
         type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalLoot",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
       },
     ],
     stateMutability: "view",

@@ -24,14 +24,24 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./libraries/base64.sol";
 
+interface IMINION {
+    function moloch() external view returns (address);
+}
 interface IMOLOCH {
     // brief interface for moloch dao v2
 
     function depositToken() external view returns (address);
+    function proposalCount() external view returns (uint256);
 
     function tokenWhitelist(address token) external view returns (bool);
 
     function totalShares() external view returns (uint256);
+    function totalLoot() external view returns (uint256);
+
+    function getMemberProposalVote(address member, uint256 i)
+        external
+        view
+        returns (uint256);
 
     function getProposalFlags(uint256 proposalId)
         external
@@ -112,10 +122,23 @@ contract Pokemol is ERC721Enumerable, Ownable {
 
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds; /*Tokens RESERVE + 1 -> PUBLIC_LIMIT*/
+    IMOLOCH moloch;
 
+    struct NftBaseAttrib {
+        address minter;
+        bool member;
+        bytes32 mintBlockhash;
+        uint256 mintTime;
+        uint256 totalShares;
+        uint256 totalLoot;
+    }
+    mapping(uint256 => NftBaseAttrib) public nftBaseAttribs;
     /// @dev Construtor sets the token and sale params
     constructor(
     ) ERC721("Pokemol", "PKM") {
+        IMINION minion = IMINION(msg.sender);
+        // is it a minion?
+        moloch = IMOLOCH(minion.moloch());
     }
 
 
@@ -146,7 +169,56 @@ contract Pokemol is ERC721Enumerable, Ownable {
         _tokenIds.increment();
 
         uint256 _id = _tokenIds.current();
+        (
+            ,
+            uint256 shares,
+            uint256 loot,
+            bool exists,
+            ,
+        ) = moloch.members(_to);
+
+        NftBaseAttrib memory nftBaseAttrib = NftBaseAttrib({
+            minter: _to,
+            member: shares > 0 || loot > 0,
+            mintBlockhash: blockhash(block.number),
+            mintTime: block.timestamp,
+            totalShares: moloch.totalShares(),
+            totalLoot: moloch.totalLoot()
+        });
+
+        nftBaseAttribs[_id] = nftBaseAttrib;
+
         _safeMint(_to, _id);
+    }
+
+    function _memberActivityScore(address _member)
+    internal
+    view
+    returns (uint score) {
+        uint256 _proposalCount = moloch.proposalCount();
+        uint256 _numProposals = 10;
+        if (_proposalCount < 10) {
+            _numProposals = _proposalCount;
+        }
+        uint256 score = 0;
+        uint8[3] memory weights = [1,1,5];
+        for (uint256 i = _proposalCount; i > _proposalCount - _numProposals; i--) {
+            (, address _proposer, address _sponsor,,,,,,,,,) = moloch.proposals(i);
+            if(_proposer == _member) {
+                score += weights[0];
+            }
+            if(_sponsor == _member) {
+                score += weights[1];
+            }
+            if(moloch.getMemberProposalVote(_member, i) > 0) {
+                // should voting be weighted highest?
+                // With this you could vote on every proposal 
+                // but still not have highest possible score
+                score += weights[2];
+            }
+        }
+        // return score between 1-100
+        score = (score* 100) / (_numProposals * (weights[0] + weights[1] + weights[2]));
     }
 
 
@@ -161,9 +233,24 @@ contract Pokemol is ERC721Enumerable, Ownable {
         // address _address = _owners[_tokenId];
         // Member storage _member = members[_address];
 
+        NftBaseAttrib memory _baseAttrib = nftBaseAttribs[_tokenId];
+        uint256 _activityScore =  _memberActivityScore(_baseAttrib.minter);
+        // uint256 _proposalCount = moloch.proposalCount();
+
         string memory _nftName = string(
             abi.encodePacked("Pokemol ")
         );
+        (
+            address delegateKey,
+            uint256 shares,
+            uint256 loot,
+            bool exists,
+            uint256 highestIndexYesVote,
+            uint256 jailed
+        ) = moloch.members(_baseAttrib.minter);
+
+        // to get base use properties from _baseAttrib - should be the same for every nft
+        // dynamic attributes from member struct and activity score.
 
         string memory _baalMetadataSVGs =
                 string(abi.encodePacked(

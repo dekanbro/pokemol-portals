@@ -24,12 +24,15 @@ interface ImolochInterface extends ethers.utils.Interface {
   functions: {
     "cancelProposal(uint256)": FunctionFragment;
     "depositToken()": FunctionFragment;
+    "getMemberProposalVote(address,uint256)": FunctionFragment;
     "getProposalFlags(uint256)": FunctionFragment;
     "getUserTokenBalance(address,address)": FunctionFragment;
     "memberAddressByDelegateKey(address)": FunctionFragment;
     "members(address)": FunctionFragment;
+    "proposalCount()": FunctionFragment;
     "proposals(uint256)": FunctionFragment;
     "tokenWhitelist(address)": FunctionFragment;
+    "totalLoot()": FunctionFragment;
     "totalShares()": FunctionFragment;
     "userTokenBalances(address,address)": FunctionFragment;
   };
@@ -41,6 +44,10 @@ interface ImolochInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "depositToken",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMemberProposalVote",
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getProposalFlags",
@@ -56,6 +63,10 @@ interface ImolochInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "members", values: [string]): string;
   encodeFunctionData(
+    functionFragment: "proposalCount",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "proposals",
     values: [BigNumberish]
   ): string;
@@ -63,6 +74,7 @@ interface ImolochInterface extends ethers.utils.Interface {
     functionFragment: "tokenWhitelist",
     values: [string]
   ): string;
+  encodeFunctionData(functionFragment: "totalLoot", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "totalShares",
     values?: undefined
@@ -81,6 +93,10 @@ interface ImolochInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getMemberProposalVote",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getProposalFlags",
     data: BytesLike
   ): Result;
@@ -93,11 +109,16 @@ interface ImolochInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "members", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "proposalCount",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "proposals", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "tokenWhitelist",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "totalLoot", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalShares",
     data: BytesLike
@@ -144,6 +165,22 @@ export class Imoloch extends Contract {
       overrides?: CallOverrides
     ): Promise<{
       0: string;
+    }>;
+
+    getMemberProposalVote(
+      member: string,
+      i: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
+    "getMemberProposalVote(address,uint256)"(
+      member: string,
+      i: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
     }>;
 
     getProposalFlags(
@@ -214,6 +251,18 @@ export class Imoloch extends Contract {
       5: BigNumber;
     }>;
 
+    proposalCount(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
+    "proposalCount()"(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
     proposals(
       proposalId: BigNumberish,
       overrides?: CallOverrides
@@ -264,6 +313,18 @@ export class Imoloch extends Contract {
       0: boolean;
     }>;
 
+    totalLoot(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
+    "totalLoot()"(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
     totalShares(
       overrides?: CallOverrides
     ): Promise<{
@@ -306,6 +367,18 @@ export class Imoloch extends Contract {
   depositToken(overrides?: CallOverrides): Promise<string>;
 
   "depositToken()"(overrides?: CallOverrides): Promise<string>;
+
+  getMemberProposalVote(
+    member: string,
+    i: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "getMemberProposalVote(address,uint256)"(
+    member: string,
+    i: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   getProposalFlags(
     proposalId: BigNumberish,
@@ -363,6 +436,10 @@ export class Imoloch extends Contract {
     5: BigNumber;
   }>;
 
+  proposalCount(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "proposalCount()"(overrides?: CallOverrides): Promise<BigNumber>;
+
   proposals(
     proposalId: BigNumberish,
     overrides?: CallOverrides
@@ -406,6 +483,10 @@ export class Imoloch extends Contract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  totalLoot(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "totalLoot()"(overrides?: CallOverrides): Promise<BigNumber>;
+
   totalShares(overrides?: CallOverrides): Promise<BigNumber>;
 
   "totalShares()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -436,6 +517,18 @@ export class Imoloch extends Contract {
     depositToken(overrides?: CallOverrides): Promise<string>;
 
     "depositToken()"(overrides?: CallOverrides): Promise<string>;
+
+    getMemberProposalVote(
+      member: string,
+      i: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getMemberProposalVote(address,uint256)"(
+      member: string,
+      i: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getProposalFlags(
       proposalId: BigNumberish,
@@ -492,6 +585,10 @@ export class Imoloch extends Contract {
       4: BigNumber;
       5: BigNumber;
     }>;
+
+    proposalCount(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "proposalCount()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     proposals(
       proposalId: BigNumberish,
@@ -536,6 +633,10 @@ export class Imoloch extends Contract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    totalLoot(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "totalLoot()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     totalShares(overrides?: CallOverrides): Promise<BigNumber>;
 
     "totalShares()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -569,6 +670,18 @@ export class Imoloch extends Contract {
     depositToken(overrides?: CallOverrides): Promise<BigNumber>;
 
     "depositToken()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getMemberProposalVote(
+      member: string,
+      i: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getMemberProposalVote(address,uint256)"(
+      member: string,
+      i: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getProposalFlags(
       proposalId: BigNumberish,
@@ -609,6 +722,10 @@ export class Imoloch extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    proposalCount(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "proposalCount()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     proposals(
       proposalId: BigNumberish,
       overrides?: CallOverrides
@@ -628,6 +745,10 @@ export class Imoloch extends Contract {
       token: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    totalLoot(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "totalLoot()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     totalShares(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -660,6 +781,18 @@ export class Imoloch extends Contract {
     depositToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "depositToken()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getMemberProposalVote(
+      member: string,
+      i: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getMemberProposalVote(address,uint256)"(
+      member: string,
+      i: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getProposalFlags(
       proposalId: BigNumberish,
@@ -703,6 +836,10 @@ export class Imoloch extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    proposalCount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "proposalCount()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     proposals(
       proposalId: BigNumberish,
       overrides?: CallOverrides
@@ -722,6 +859,10 @@ export class Imoloch extends Contract {
       token: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    totalLoot(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "totalLoot()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     totalShares(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

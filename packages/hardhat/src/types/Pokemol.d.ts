@@ -28,6 +28,7 @@ interface PokemolInterface extends ethers.utils.Interface {
     "isApprovedForAll(address,address)": FunctionFragment;
     "mintDemo()": FunctionFragment;
     "name()": FunctionFragment;
+    "nftBaseAttribs(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -58,6 +59,10 @@ interface PokemolInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "mintDemo", values?: undefined): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "nftBaseAttribs",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
@@ -117,6 +122,10 @@ interface PokemolInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "mintDemo", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "nftBaseAttribs",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(
@@ -255,6 +264,42 @@ export class Pokemol extends Contract {
       overrides?: CallOverrides
     ): Promise<{
       0: string;
+    }>;
+
+    nftBaseAttribs(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      minter: string;
+      member: boolean;
+      mintBlockhash: string;
+      mintTime: BigNumber;
+      totalShares: BigNumber;
+      totalLoot: BigNumber;
+      0: string;
+      1: boolean;
+      2: string;
+      3: BigNumber;
+      4: BigNumber;
+      5: BigNumber;
+    }>;
+
+    "nftBaseAttribs(uint256)"(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      minter: string;
+      member: boolean;
+      mintBlockhash: string;
+      mintTime: BigNumber;
+      totalShares: BigNumber;
+      totalLoot: BigNumber;
+      0: string;
+      1: boolean;
+      2: string;
+      3: BigNumber;
+      4: BigNumber;
+      5: BigNumber;
     }>;
 
     owner(
@@ -470,6 +515,42 @@ export class Pokemol extends Contract {
 
   "name()"(overrides?: CallOverrides): Promise<string>;
 
+  nftBaseAttribs(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<{
+    minter: string;
+    member: boolean;
+    mintBlockhash: string;
+    mintTime: BigNumber;
+    totalShares: BigNumber;
+    totalLoot: BigNumber;
+    0: string;
+    1: boolean;
+    2: string;
+    3: BigNumber;
+    4: BigNumber;
+    5: BigNumber;
+  }>;
+
+  "nftBaseAttribs(uint256)"(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<{
+    minter: string;
+    member: boolean;
+    mintBlockhash: string;
+    mintTime: BigNumber;
+    totalShares: BigNumber;
+    totalLoot: BigNumber;
+    0: string;
+    1: boolean;
+    2: string;
+    3: BigNumber;
+    4: BigNumber;
+    5: BigNumber;
+  }>;
+
   owner(overrides?: CallOverrides): Promise<string>;
 
   "owner()"(overrides?: CallOverrides): Promise<string>;
@@ -632,6 +713,42 @@ export class Pokemol extends Contract {
     name(overrides?: CallOverrides): Promise<string>;
 
     "name()"(overrides?: CallOverrides): Promise<string>;
+
+    nftBaseAttribs(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      minter: string;
+      member: boolean;
+      mintBlockhash: string;
+      mintTime: BigNumber;
+      totalShares: BigNumber;
+      totalLoot: BigNumber;
+      0: string;
+      1: boolean;
+      2: string;
+      3: BigNumber;
+      4: BigNumber;
+      5: BigNumber;
+    }>;
+
+    "nftBaseAttribs(uint256)"(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      minter: string;
+      member: boolean;
+      mintBlockhash: string;
+      mintTime: BigNumber;
+      totalShares: BigNumber;
+      totalLoot: BigNumber;
+      0: string;
+      1: boolean;
+      2: string;
+      3: BigNumber;
+      4: BigNumber;
+      5: BigNumber;
+    }>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -825,6 +942,16 @@ export class Pokemol extends Contract {
 
     "name()"(overrides?: CallOverrides): Promise<BigNumber>;
 
+    nftBaseAttribs(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "nftBaseAttribs(uint256)"(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     "owner()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -997,6 +1124,16 @@ export class Pokemol extends Contract {
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "name()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    nftBaseAttribs(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "nftBaseAttribs(uint256)"(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
